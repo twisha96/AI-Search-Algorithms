@@ -9,3 +9,4 @@ class Cell:
 		value = 4 => burning cell
 		"""
 		cell.value = value
+		cell.parent = None
