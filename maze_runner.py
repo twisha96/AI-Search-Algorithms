@@ -29,12 +29,10 @@ def get_maze(dim, p):
 def get_path(x, y, maze):
 	path = []
 	while((x,y)!=(0,0)):
-		print((x,y))
 		path.insert(0,(x,y))
 		(x, y) = maze[x][y].parent
 	path.insert(0,(0,0))
 	return path
-
 
 def visualize_maze(maze):
 	basic_maze = []
