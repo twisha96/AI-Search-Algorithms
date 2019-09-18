@@ -1,51 +1,65 @@
 import random
 from cell import Cell
 
+# import the visualization libraries
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 # returns maze with dimension dim with probability p of a cell being occupied
 def get_maze(dim, p):
 	maze = []
-	basic_maze = []
 
 	for row in xrange(dim):
 		maze.append([])
-		basic_maze.append([])
 		for col in xrange(dim):
 			if random.random()<p:
 				# occupied cell
 				maze[row].append(Cell(1))
-				basic_maze[row].append(1) 
 			else:
 				# empty cell
 				maze[row].append(Cell(0))
-				basic_maze[row].append(0) 
 
 	# start cell
 	maze[0][0] = Cell(2) 
-	basic_maze[0][0] = 0
 	# goal cell
 	maze[dim-1][dim-1] = Cell(3) 
-	basic_maze[dim-1][dim-1] = 0
-	return maze, basic_maze
+	return maze
 
-dim = 10
-p = 0.3
-maze, basic_maze = get_maze(dim, p)
 
-import seaborn as sns
-import matplotlib.pyplot as plt
-ax = sns.heatmap(basic_maze, cmap="Blues", cbar=False, linewidths=.1, linecolor="Black")
-plt.show()
+def get_path(x, y, maze):
+	path = []
+	while((x,y)!=(0,0)):
+		print((x,y))
+		path.insert(0,(x,y))
+		(x, y) = maze[x][y].parent
+	path.insert(0,(0,0))
+	return path
 
-# import matplotlib as mpl
-# from matplotlib import pyplot
-# import numpy as np
 
-# bounds=[-1, 2]
-# cmap = mpl.colors.ListedColormap(['white','black'])
-# norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+def visualize_maze(maze):
+	basic_maze = []
+	dim = len(maze)
+	for i in range(len(maze)):
+		basic_maze.append([])
+		for j in range(len(maze[0])):
+			basic_maze[i].append(maze[i][j].value)
 
-# # tell imshow about color map so that only set colors are used
-# img = pyplot.imshow(basic_maze,interpolation='nearest',
-#                     cmap=cmap, norm=norm)
+	basic_maze[0][0]=0
+	basic_maze[dim-1][dim-1]=0
 
-# pyplot.show()
+	ax = sns.heatmap(basic_maze, cmap="Blues", cbar=False, linewidths=.1, linecolor="Black")
+	plt.show()
+
+def trace_path(maze, path):
+	basic_maze = []
+	for i in range(len(maze)):
+		basic_maze.append([])
+		for j in range(len(maze[0])):
+			basic_maze[i].append(maze[i][j].value)
+
+	for i in range(len(path)):
+		coordinates = path[i]
+		basic_maze[coordinates[0]][coordinates[1]] = 0.5
+
+	ax = sns.heatmap(basic_maze, cmap="Blues", cbar=False, linewidths=.1, linecolor="Black")
+	plt.show()
