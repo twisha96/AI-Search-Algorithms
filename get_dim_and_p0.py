@@ -24,7 +24,7 @@ def get_avg_times_and_total_tries(dim, p, mainstart_time):
 				time_take = time.time() - startTime 
 				avg_time = (avg_time*success_count+(time_take))/(success_count + 1)
 				success_count = success_count + 1
-				print success_count
+				print "Success count: " + str(success_count)
 				avg_times.append(avg_time) 
 				if max_avg_time < avg_time:
 					max_avg_time = avg_time
@@ -88,9 +88,8 @@ generate_comparison_plot - for comparison between each of the dims
 chosen dim: 120
 '''
 dim = 120
-get_po_value()
-get_avg_times_and_total_tries(dim, 0.2, mainstart_time)
 '''
 p_array = [0.1, 0.125, 0.15, 0.175, 0.20, 0.225, 0.25, 0.275, 0.30, 0.325, 0.35, 0.375, 0.40]
 get_solvability(dim, p_array)
+get_po_value()
 '''
