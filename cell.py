@@ -10,3 +10,4 @@ class Cell:
 		"""
 		cell.value = value
 		cell.parent = None
+		cell.visited = False
