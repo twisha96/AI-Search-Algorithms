@@ -1,10 +1,12 @@
 import maze_runner
 import CheckNeighbours_BBFS
 from collections import deque
+import  static_maze
 
-dim = 20
+dim = 10
 probability = 0.3
 maze = maze_runner.get_maze(dim, probability)
+#maze = static_maze.get_static_maze()
 result = 0
 fringe1 = deque()
 fringe2 = deque()
@@ -22,7 +24,7 @@ while len(fringe1) != 0 and len(fringe2) != 0:
     current_cell1 = maze[m1][n1]
     if current1 not in closed1:
         if current_cell1.value != 1:
-            intersect1 = CheckNeighbours_BBFS.checkneighbours_bbfs(maze, m1, n1, dim, current_cell1, fringe1, closed1)
+            intersect1 = CheckNeighbours_BBFS.checkneighbours_bbfs(maze, m1, n1, dim, fringe1, closed1)
             if intersect1 is not None:
                 result = 1
                 print "Intersecting node:", intersect1
@@ -35,7 +37,7 @@ while len(fringe1) != 0 and len(fringe2) != 0:
     current_cell2 = maze[m2][n2]
     if current2 not in closed2:
         if current_cell2.value != 1:
-            intersect2 = CheckNeighbours_BBFS.checkneighbours_bbfs(maze, m2, n2, dim, current_cell2, fringe2, closed2)
+            intersect2 = CheckNeighbours_BBFS.checkneighbours_bbfs(maze, m2, n2, dim, fringe2, closed2)
             if intersect2 is not None:
                 result = 1
                 print "Intersecting node:", intersect2
@@ -61,4 +63,5 @@ else:
                 break
             current2 = maze[current2[0]][current2[1]].parent
     print path
+    print len(path)
     maze_runner.trace_path(maze, path)

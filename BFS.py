@@ -1,8 +1,9 @@
 from collections import deque
 import maze_runner
 from CheckNeighbours import CheckNeighours
+import static_maze
 
-dim = 20
+dim = 10
 probability = 0.1
 
 result = 0
@@ -10,6 +11,7 @@ closed = []
 fringe = deque()
 path = []
 maze = maze_runner.get_maze(dim, probability)
+#maze = static_maze.get_static_maze()
 
 fringe.append((0, 0))
 while(len(fringe)!=0):
@@ -24,7 +26,7 @@ while(len(fringe)!=0):
         else:
             if current_cell.value != 1:
                 checkneighbours = CheckNeighours()
-                checkneighbours.check_neighbours(maze, dim, m, n, current_cell, fringe, closed)
+                checkneighbours.check_neighbours(maze, dim, m, n, fringe, closed)
             closed.append(current)
 
 if result == 0:
@@ -33,5 +35,6 @@ if result == 0:
 else:
     path = maze_runner.get_path(m, n, maze)
     print path
+    print len(path)
     maze_runner.trace_path(maze, path)
 
