@@ -89,6 +89,7 @@ chosen dim: 120
 '''
 dim = 120
 get_po_value()
+get_avg_times_and_total_tries(dim, 0.2, mainstart_time)
 '''
 p_array = [0.1, 0.125, 0.15, 0.175, 0.20, 0.225, 0.25, 0.275, 0.30, 0.325, 0.35, 0.375, 0.40]
 get_solvability(dim, p_array)
