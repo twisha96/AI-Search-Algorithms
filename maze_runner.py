@@ -4,6 +4,7 @@ from cell import Cell
 # import the visualization libraries
 import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
 
 # returns maze with dimension dim with probability p of a cell being occupied
 def get_maze(dim, p):
@@ -50,6 +51,27 @@ def visualize_maze(maze):
 	ax = sns.heatmap(basic_maze, cmap="Blues", cbar=False, linewidths=.1, linecolor="Black")
 	plt.show()
 	plt.close()
+
+
+# visualises the random maze generated
+def visualize_explored_cells(maze, closed_set):
+	basic_maze = []
+	dim = len(maze)
+
+	for i in range(len(maze)):
+		basic_maze.append([])
+		for j in range(len(maze[0])):
+			basic_maze[i].append(maze[i][j].value)
+
+	for coordinates in closed_set:
+		basic_maze[coordinates[0]][coordinates[1]] = 0.5
+
+	plt.figure()
+	# cmap=ListedColormap(['cornsilk', 'royalblue', 'grey'])
+	ax = sns.heatmap(basic_maze, cmap="Blues", cbar=False, linewidths=.1, linecolor="Black")
+	plt.show()
+	plt.close()
+
 
 # visulaises the path from source to destination in the maze 
 def trace_path(maze, path):
