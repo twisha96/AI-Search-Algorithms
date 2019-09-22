@@ -94,12 +94,13 @@ def a_star_traversal(maze, heuristic):
 		print(priority, (x,y))
 		if((x,y)==(dim-1, dim-1)):
 			# print "Solution found"
+			closed_set.add((dim-1, dim-1))
 			return True, exploration_steps, max_fringe_length, avg_fringe_length, closed_set
 		fringe = get_neighbors(maze, x, y, dim, heuristic, closed_set, fringe)
 		fringe_len = fringe.qsize()
 		if fringe_len>max_fringe_length:
 			max_fringe_length = fringe_len
-		avg_fringe_length += avg_fringe_length + (fringe_len - avg_fringe_length)/exploration_steps
+		avg_fringe_length = avg_fringe_length + (fringe_len - avg_fringe_length)/exploration_steps
 		closed_set.add((x,y))
 		print("Fringe: "+str(not(fringe.empty())))
 		print(fringe.queue)
