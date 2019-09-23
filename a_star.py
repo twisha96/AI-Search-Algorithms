@@ -2,6 +2,7 @@ import math
 import copy 
 import maze_runner as mr
 from Queue import PriorityQueue
+import pdb
 
 # Given a co-ordinate (x,y), calculates the manhattan distance from the destination (dim-1, dim-1)
 def manhattan_heuristic(x, y, dim):
@@ -27,10 +28,11 @@ Fringe is implemented using a Priority Queue.
 The order of exploration of cells does not matter as the fringe
 is sorted based on the priority assigned the cell.
 """
-def get_neighbors(maze, x, y, dim, heuristic, closed_set, fringe):
+def get_neighbors(maze, x, y, dim, heuristic, fringe):
 	source_distance = source_dist(x, y, maze) 
-
-	# left neighbor
+	# pdb.set_trace()
+	# top neighbor
+	# print x,y
 	if(x-1>=0 and maze[x-1][y].value!=1 and not maze[x-1][y].visited): #(x-1,y) not in closed_set
 			maze[x-1][y].visited = True
 			maze[x-1][y].parent = (x,y)
@@ -40,7 +42,7 @@ def get_neighbors(maze, x, y, dim, heuristic, closed_set, fringe):
 				priority_value = (source_distance + 1) + euclidian_heuristic(x-1, y, dim)
 			fringe.put((priority_value, (x-1, y)))
 			
-	# right neighbor
+	# bottom neighbor
 	if(x+1<=dim-1 and maze[x+1][y].value!=1 and not maze[x+1][y].visited): #(x+1,y) not in closed_set
 			maze[x+1][y].visited = True
 			maze[x+1][y].parent = (x,y)
@@ -50,7 +52,7 @@ def get_neighbors(maze, x, y, dim, heuristic, closed_set, fringe):
 				priority_value = (source_distance + 1) + euclidian_heuristic(x+1, y, dim)
 			fringe.put((priority_value, (x+1, y)))
 	
-	# bottom neighbor
+	# left neighbor
 	if(y-1>=0 and maze[x][y-1].value!=1 and not maze[x][y-1].visited): #(x,y-1) not in closed_set
 			maze[x][y-1].visited = True
 			maze[x][y-1].parent = (x,y)
@@ -60,7 +62,7 @@ def get_neighbors(maze, x, y, dim, heuristic, closed_set, fringe):
 				priority_value = (source_distance + 1) + euclidian_heuristic(x, y-1, dim)
 			fringe.put((priority_value, (x, y-1)))
 	
-	# top neighbor
+	# right neighbor
 	if(y+1<=dim-1 and maze[x][y+1].value!=1 and not maze[x][y+1].visited): #(x,y+1) not in closed_set)
 			maze[x][y+1].visited = True
 			maze[x][y+1].parent = (x,y)
@@ -83,7 +85,8 @@ def a_star_traversal(maze, heuristic):
 	closed_set = set()
 	fringe = PriorityQueue()
 	fringe.put((0, (0, 0)))
-	
+	dim = len(maze)
+
 	exploration_steps = 0	
 	max_fringe_length = 0
 	avg_fringe_length = 0
@@ -91,23 +94,25 @@ def a_star_traversal(maze, heuristic):
 	while(not(fringe.empty())):
 		(priority, (x, y)) = fringe.get()
 		exploration_steps+=1
-		print(priority, (x,y))
+		# print(priority, (x,y))
 		if((x,y)==(dim-1, dim-1)):
 			# print "Solution found"
 			closed_set.add((dim-1, dim-1))
 			return True, exploration_steps, max_fringe_length, avg_fringe_length, closed_set
-		fringe = get_neighbors(maze, x, y, dim, heuristic, closed_set, fringe)
+
+		fringe = get_neighbors(maze, x, y, dim, heuristic, fringe)
 		fringe_len = fringe.qsize()
 		if fringe_len>max_fringe_length:
 			max_fringe_length = fringe_len
 		avg_fringe_length = avg_fringe_length + (fringe_len - avg_fringe_length)/exploration_steps
 		closed_set.add((x,y))
-		print("Fringe: "+str(not(fringe.empty())))
-		print(fringe.queue)
+		# print("Fringe: "+str(not(fringe.empty())))
+		# print(fringe.queue)
 
 	# print "No Solution"
 	return False, exploration_steps, max_fringe_length, avg_fringe_length, closed_set
 
+"""
 # Main code
 dim = 20
 p = 0.2
@@ -132,3 +137,4 @@ if euclidian_result:
 	mr.trace_path(maze, path)
 else:
 	mr.visualize_maze(maze)
+"""
