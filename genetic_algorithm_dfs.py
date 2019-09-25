@@ -6,10 +6,10 @@ import numpy as np
 from dfs import dfs_traversal
 
 # dim = Dimension of maze, p = probability of the cells being occupied
-dim = 20
+dim = 10
 p = 0.4
 
-# priority queue with fitness (i.e. harndness) associated with each maze
+# priority queue with fitness (i.e. hardness) associated with each maze
 maze_population = PriorityQueue()
 population_size = 10  # total population size including parents and children
 total_crossovers = 10  # signifies the number of children generated
@@ -21,10 +21,10 @@ for i in range(population_size):
         maze = mr.get_maze(dim, p)
 
         # use dfs algorithm to generate fringe
-        dfs_result, exploration_steps, max_fringe_length, closed_set = dfs_traversal(copy.deepcopy(maze), dim)
+        result_dict = dfs_traversal(copy.deepcopy(maze), dim)
         # calculate fitness using the max fringe size
-        maze_fitness = -max_fringe_length
-        if dfs_result:
+        maze_fitness = -result_dict['max_fringe_length']
+        if result_dict['is_solvable']:
             break
 
     # mr.visualize_maze(maze)
@@ -64,12 +64,12 @@ for generation_count in range(generations):
                 child_maze[x][y].value = int(not (child_maze[x][y].value))
 
             # compute the fitness of each child
-            dfs_result, exploration_steps, max_fringe_length, closed_set = dfs_traversal(copy.deepcopy(child_maze), dim)
+            result_dict = dfs_traversal(copy.deepcopy(child_maze), dim)
 
             # calculate fitness using the max fringe length
-            maze_fitness = -max_fringe_length
+            maze_fitness = -result_dict['max_fringe_length']
             # print dfs_result
-            if dfs_result:
+            if result_dict['is_solvable']:
                 break
 
         # print dfs_result, "checking child before adding it to population"
