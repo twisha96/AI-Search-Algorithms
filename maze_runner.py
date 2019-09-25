@@ -21,9 +21,9 @@ def get_maze(dim, p):
 				maze[row].append(Cell(0))
 
 	# start cell
-	maze[0][0] = Cell(2) 
+	maze[0][0] = Cell(0) 
 	# goal cell
-	maze[dim-1][dim-1] = Cell(3) 
+	maze[dim-1][dim-1] = Cell(0) 
 	return maze
 
 # backtraces the path from destiantion till source
@@ -46,8 +46,6 @@ def visualize_maze(maze):
 
 	basic_maze[0][0]=0
 	basic_maze[dim-1][dim-1]=0
-
-	plt.figure()
 	ax = sns.heatmap(basic_maze, cmap="Blues", cbar=False, linewidths=.1, linecolor="Black")
 	plt.show()
 	plt.close()
@@ -83,9 +81,10 @@ def trace_path(maze, path):
 
 	for i in range(len(path)):
 		coordinates = path[i]
-		basic_maze[coordinates[0]][coordinates[1]] = 0.5
-
-	plt.figure()
+		if (basic_maze[coordinates[0]][coordinates[1]] != 2):
+			basic_maze[coordinates[0]][coordinates[1]] = 0.5
+		else:
+			basic_maze[coordinates[0]][coordinates[1]] = 1.5
 	ax = sns.heatmap(basic_maze, cmap="Blues", cbar=False, linewidths=.1, linecolor="Black")
 	plt.show()
 	plt.close()
