@@ -31,13 +31,6 @@ def bd_bfs (maze, dim):
                 if intersect1 is not None:
                     print "Intersecting node 1:", intersect1
                     result = 1
-                    result_dict = {
-                        "is_solvable": True,
-                        "total_steps": exploration_steps,
-                        "max_fringe_length": max_fringe_length,
-                        "avg_fringe_length": avg_fringe_length,
-                        "closed_set": closed_set
-                    }
                     break
                 closed1.append((m1, n1))
 
@@ -50,13 +43,6 @@ def bd_bfs (maze, dim):
                 intersect2 = CheckNeighbours_BBFS.checkneighbours_bbfs(maze, m2, n2, dim, fringe2, closed2)
                 if intersect2 is not None:
                     print "Intersecting node 2:", intersect2
-                    result_dict = {
-                        "is_solvable": True,
-                        "total_steps": exploration_steps,
-                        "max_fringe_length": max_fringe_length,
-                        "avg_fringe_length": avg_fringe_length,
-                        "closed_set": closed_set
-                    }
                     result = 1
                     break
                 closed2.append((m2, n2))
@@ -97,6 +83,15 @@ def bd_bfs (maze, dim):
             maze_runner.trace_path_bbfs(maze, path2, path1)
         # print path
         # print len(path)
+
+        result_dict = {
+            "is_solvable": True,
+            "total_steps": exploration_steps,
+            "max_fringe_length": max_fringe_length,
+            "avg_fringe_length": avg_fringe_length,
+            "closed_set": closed_set,
+            "path_length": len(path1)+len(path2)
+        }
         return result_dict
 
 dim = 10
