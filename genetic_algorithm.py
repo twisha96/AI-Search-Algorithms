@@ -20,14 +20,14 @@ def test_population(new_maze_population):
 	print "--------------------"
 
 # Main code
-dim = 100
+dim = 120
 p = 0.2
 
 # priority queue with fitness (i.e. hardness) associated with each maze
 maze_population = PriorityQueue()
 population_size = 50
 total_crossovers = 50
-mutation_rate = 0.01
+mutation_rate = 0.02
 generations = 100
 population_fitness_vector = []
 
@@ -51,14 +51,18 @@ print "initial population generated"
 for generation_count in range(generations):
 	print "Generation: ", generation_count
 	for crossover_count in range(total_crossovers):
-		# print "Child number: ", crossover_count
+		# if crossover_count%10==0:
+			# print crossover_count, " children generated"
+		print "Child number: ", crossover_count
 		# keep generating child mazes until we find a solvable one
 		while True:
 			"""Approach1: Parents chosen randomly"""
 			# choose two parent mazes at random from the population
-			# parents = random.sample(range(0, population_size), 2)
-			# parent1_index = parents[0]
-			# parent2_index = parents[1]
+			"""
+			parents = random.sample(range(0, population_size), 2)
+			parent1_index = parents[0]
+			parent2_index = parents[1]
+			"""
 
 			"""Approach2: Parents chosen based on fitness"""
 			# assign likehood of getting chosen as a parent
@@ -99,16 +103,26 @@ for generation_count in range(generations):
 			child_maze = child_maze.tolist()
 
 			# mutate the child maze
-			mutations = int(mutation_rate*dim*dim)
+			mutations = int(mutation_rate*dim)
 			for i in range(mutations):
+				"""Approach1: Randomly flipping the bit"""
+				"""
 				while True:
 					x = random.randint(0, dim-1)
 					y = random.randint(0, dim-1)
 					if not (x==0 and y==0) and not (x==dim-1 and y==dim-1):
 						break
-
 				child_maze[x][y].value = int(not(child_maze[x][y].value))
-			# print "Mutation Successful"
+				"""
+				
+				"""Approach2: Swapping Rows"""
+				mutation_rows = random.sample(range(1, dim-1), 2)
+				tmp_row = child_maze[mutation_rows[0]]
+				child_maze[mutation_rows[0]] = child_maze[mutation_rows[1]]
+				child_maze[mutation_rows[1]] = tmp_row
+
+
+			print "Mutation Successful"
 
 			# compute the fitness of each child
 			child_result_dict = \
