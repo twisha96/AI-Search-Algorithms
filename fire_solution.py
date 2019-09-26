@@ -15,10 +15,11 @@ from that cell to all the cells present in the boundary_cells. boundary_cells is
 which are on fire and are present at the edge of the fire cluster.
 '''
 def update_fringe_using_boundary_cells(fringe, maze, boundary_cells):
+	dim_2 = len(maze)
 	new_fringe = PriorityQueue()
 	for i in xrange(fringe.qsize()):
 		(priority, (x, y)) = fringe.get()
-		priority =  manhattan_heuristic(x, y, dim) - get_closest_fire_cell_using_boundary_cells(maze, x, y, boundary_cells)
+		priority =  manhattan_heuristic(x, y, dim_2) - get_closest_fire_cell_using_boundary_cells(maze, x, y, boundary_cells)
 		new_fringe.put((priority, (x, y)))
 	return new_fringe
 
