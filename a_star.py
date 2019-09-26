@@ -6,7 +6,7 @@ import pdb
 
 # Given a co-ordinate (x,y), calculates the manhattan distance from the destination (dim-1, dim-1)
 def manhattan_heuristic(x, y, dim):
-	return abs(x - dim)+abs(y - dim)
+	return (abs(x - dim)+abs(y - dim))
 
 # Given a co-ordinate (x,y), calculates the euclidian distance from the destination (dim-1, dim-1)
 def euclidian_heuristic(x, y, dim):
@@ -82,7 +82,9 @@ def a_star_traversal(maze, heuristic):
 	closed_set = set()
 	fringe = PriorityQueue()
 	fringe.put((0, (0, 0)))
+	maze[0][0].visited = True
 	dim = len(maze)
+	max_fringe = None
 
 	exploration_steps = 0	
 	max_fringe_length = 0
@@ -91,8 +93,13 @@ def a_star_traversal(maze, heuristic):
 	while(not(fringe.empty())):
 		(priority, (x, y)) = fringe.get()
 		exploration_steps+=1
-	
+		# print (x, y)
 		if((x,y)==(dim-1, dim-1)):
+			# max_fringe_list = []
+			# for i in range(max_fringe.qsize()):
+			# 	print max_fringe.queue[i]
+			# 	max_fringe_list.append(max_fringe.queue[i][1])
+			# maze_runner.visualize_explored_cells(maze, max_fringe_list)
 			# print "Solution found"
 			closed_set.add((dim-1, dim-1))
 			result_dict = {
@@ -107,9 +114,16 @@ def a_star_traversal(maze, heuristic):
 		fringe_len = fringe.qsize()
 		if fringe_len>max_fringe_length:
 			max_fringe_length = fringe_len
+			max_fringe = PriorityQueue()
+			max_fringe.queue = copy.deepcopy(fringe.queue)
 		avg_fringe_length = avg_fringe_length + (fringe_len - avg_fringe_length)/exploration_steps
 		closed_set.add((x,y))
 
+	# print max_fringe
+	# max_fringe_list = []
+	# for i in range(max_fringe.qsize()):
+	# 	max_fringe_list.append(max_fringe.queue[i][1])
+	# maze_runner.visualize_explored_cells(maze, max_fringe_list)
 	# print "No Solution"
 	result_dict = {
 		"is_solvable": False, 
@@ -119,7 +133,7 @@ def a_star_traversal(maze, heuristic):
 		"closed_set": closed_set}
 	return result_dict
 
-def test_a_star(dim = 20, p = 0.2):
+def test_a_star(dim, p):
 
 	test_maze = maze_runner.get_maze(dim, p)
 
@@ -127,22 +141,22 @@ def test_a_star(dim = 20, p = 0.2):
 	maze = copy.deepcopy(test_maze)
 	manhattan_result_dict = a_star_traversal(maze, "manhattan")
 	
-	if manhattan_result_dict["is_solvable"]:
-		path = maze_runner.get_path(dim-1, dim-1, maze)
-		print "Path", path
-		print "Length of path: ", len(path)
-		maze_runner.trace_path(maze, path)
-	else:
-		maze_runner.visualize_maze(maze)
+	# if manhattan_result_dict["is_solvable"]:
+	# 	path = maze_runner.get_path(dim-1, dim-1, maze)
+	# 	print "Path", path
+	# 	print "Length of path: ", len(path)
+	# 	maze_runner.trace_path(maze, path)
+	# else:
+	# 	maze_runner.visualize_maze(maze)
 
-	# a-star with euclidian heuristic
-	maze = copy.deepcopy(test_maze)
-	euclidian_result_dict = a_star_traversal(maze, "euclidian")
+	# # a-star with euclidian heuristic
+	# maze = copy.deepcopy(test_maze)
+	# euclidian_result_dict = a_star_traversal(maze, "euclidian")
 	
-	if euclidian_result_dict["is_solvable"]:
-		path = maze_runner.get_path(dim-1, dim-1, maze)
-		print "Path", path
-		print "Length of path: ", len(path)
-		maze_runner.trace_path(maze, path)
-	else:
-		maze_runner.visualize_maze(maze)
+	# if euclidian_result_dict["is_solvable"]:
+	# 	path = maze_runner.get_path(dim-1, dim-1, maze)
+	# 	print "Path", path
+	# 	print "Length of path: ", len(path)
+	# 	maze_runner.trace_path(maze, path)
+	# else:
+	# 	maze_runner.visualize_maze(maze)
