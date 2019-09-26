@@ -1,3 +1,7 @@
+from maze_runner import get_maze
+from maze_runner import get_path
+from maze_runner import trace_path
+
 """
 checks for valid neighbours which are not present and in
 the closed set and adds them to the fringe. Following is the 
@@ -40,7 +44,8 @@ def get_neighbors(maze, x, y, dim, closed_set, fringe):
 # traverses the graph using DFS algorithm
 def dfs_traversal(maze, dim):
 	closed_set = set()
-	fringe = [(0, 0)]
+	fringe = [(0,0)]
+	# To record the max size of the fringe during exploration
 	max_fringe_length = 0
 	exploration_steps = 0
 	avg_fringe_length = 0
@@ -48,8 +53,10 @@ def dfs_traversal(maze, dim):
 		(x, y) = fringe.pop()
 		exploration_steps = exploration_steps + 1
 		if (x, y) in closed_set:
+			# No need to explore elements in the closed set
 			continue
 		if (x, y) == (dim-1, dim-1):
+			# Solution found
 			result_dict = {
 				"is_solvable": True,
 				"total_steps": exploration_steps,
@@ -73,3 +80,12 @@ def dfs_traversal(maze, dim):
 		"closed_set": closed_set
 	}
 	return result_dict
+
+dim = 10
+p = 0.2
+maze = get_maze(dim, p)
+result = dfs_traversal(maze, dim)
+if result["is_solvable"]:
+	path = get_path(dim-1, dim-1, maze)
+	print "Path length: " + str((len(path)))
+	trace_path(maze, path)
