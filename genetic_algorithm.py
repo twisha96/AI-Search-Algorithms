@@ -20,15 +20,16 @@ def test_population(new_maze_population):
 	print "--------------------"
 
 # Main code
-dim = 15
-p = 0.3
+dim = 100
+p = 0.2
 
 # priority queue with fitness (i.e. hardness) associated with each maze
 maze_population = PriorityQueue()
 population_size = 50
 total_crossovers = 50
-mutation_rate = 0
-generations = 10
+mutation_rate = 0.01
+generations = 100
+population_fitness_vector = []
 
 for i in range(population_size):
 	while True:
@@ -43,21 +44,46 @@ for i in range(population_size):
 			break
 
 	maze_population.put((maze_fitness, copy.deepcopy(maze)))
+	population_fitness_vector.append(-maze_fitness)
 
 print "initial population generated"
 
 for generation_count in range(generations):
+	print "Generation: ", generation_count
 	for crossover_count in range(total_crossovers):
-
+		# print "Child number: ", crossover_count
 		# keep generating child mazes until we find a solvable one
 		while True:
+			"""Approach1: Parents chosen randomly"""
 			# choose two parent mazes at random from the population
-			parents = random.sample(range(0, population_size), 2)
+			# parents = random.sample(range(0, population_size), 2)
+			# parent1_index = parents[0]
+			# parent2_index = parents[1]
+
+			"""Approach2: Parents chosen based on fitness"""
+			# assign likehood of getting chosen as a parent
+			population_fitness_vector = np.cumsum(population_fitness_vector)
+			max_sum = population_fitness_vector[-1]
+			# the vector now has the cumulative probability of each cell being chosen as the parent
+			population_fitness_vector = [float(cumulative_fitness)/max_sum for 
+			cumulative_fitness in population_fitness_vector]
+
+			random_number = random.random()
+			for i in range(population_size):
+				if random_number<population_fitness_vector[i]:
+					parent1_index = i
+					break
+
+			while(True):
+				random_number = random.random()
+				for i in range(population_size):
+					if random_number<population_fitness_vector[i]:
+						parent2_index = i
+						break
+				if parent2_index!=parent1_index:
+					break
 
 			# combine the parents in some way to get the child maze
-			parent1_index = parents[0]
-			parent2_index = parents[1]
-
 			# choose a cross over point randomly
 			crossover_point = random.random()
 			crossover_column = int(crossover_point*dim)
@@ -99,9 +125,11 @@ for generation_count in range(generations):
 	# create new population using 90% best mazes and 10% worst mazes
 	best_mazes_count = int(0.9*population_size)
 	worst_mazes_count = population_size - best_mazes_count
+	random_mazes_count = population_size - best_mazes_count
 	fitness_average = 0
 
 	new_maze_population = PriorityQueue()
+	population_fitness_vector = []
 
 	for count in range(best_mazes_count):
 		(fitness, maze) = maze_population.get()
@@ -109,22 +137,41 @@ for generation_count in range(generations):
 			fitness_fittest = fitness
 		fitness_average = fitness_average + (fitness - fitness_average)/(count+1)
 		new_maze_population.put((fitness, copy.deepcopy(maze)))
+		population_fitness_vector.append(fitness)
 
-	print "fitness of fittest: ", fitness_fittest
-	print "average fitness of population: ", fitness_average
-	while maze_population.qsize()>worst_mazes_count:
-		maze_population.get()
+	new_gen_random_ind = random.sample(range(0, maze_population.qsize()), random_mazes_count)
+	new_gen_random_ind.sort()
 
-	for count in range(worst_mazes_count):
+	count=0
+	for i in range(maze_population.qsize()):
 		(fitness, maze) = maze_population.get()
-		new_maze_population.put((fitness, copy.deepcopy(maze)))
+		if count<len(new_gen_random_ind) and i==new_gen_random_ind[count]:
+			new_maze_population.put((fitness, copy.deepcopy(maze)))
+			population_fitness_vector.append(fitness)
+			fitness_average = fitness_average + (fitness - fitness_average)/(count+1)
+			count+=1
 	
+	print "fitness of the fittest maze: ", fitness_fittest
+	print "average fitness of the new population: ", fitness_average
+
+	"""
+	Approach1: We take the weakest 10% of the popluation to the new population
+	# print "fitness of fittest: ", fitness_fittest
+	# print "average fitness of fittest population: ", fitness_average
+	# while maze_population.qsize()>worst_mazes_count:
+	# 	maze_population.get()
+
+	# for count in range(worst_mazes_count):
+	# 	(fitness, maze) = maze_population.get()
+	# 	if count == worst_mazes_count-1
+	# 		fitness_worst = fitness
+	# 	new_maze_population.put((fitness, copy.deepcopy(maze)))
+	"""
 	maze_population = new_maze_population
 
 			
 hardest_maze = maze_population.get()
 print "fitness of the hardest maze: ", hardest_maze[0]
-pdb.set_trace()
 maze_runner.visualize_maze(hardest_maze[1])
 hardest_maze_result_dict = a_star_traversal(copy.deepcopy(hardest_maze[1]), "manhattan")
 maze_runner.visualize_explored_cells(hardest_maze[1], hardest_maze_result_dict["closed_set"])
