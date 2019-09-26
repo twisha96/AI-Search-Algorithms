@@ -9,7 +9,7 @@ BFS algorithm
 '''
 
 
-def bfs(maze, dim):
+def bfs_traversal(maze, dim):
     closed_set = []
     fringe = deque()
     exploration_steps = 0
