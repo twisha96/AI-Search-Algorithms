@@ -5,6 +5,7 @@ from Queue import PriorityQueue
 import numpy as np
 from a_star import a_star_traversal
 import pdb
+import pandas as pd
 
 def test_population(new_maze_population):
 	print "--------------------"
@@ -20,16 +21,18 @@ def test_population(new_maze_population):
 	print "--------------------"
 
 # Main code
-dim = 120
+dim = 50
 p = 0.2
 
 # priority queue with fitness (i.e. hardness) associated with each maze
 maze_population = PriorityQueue()
-population_size = 50
-total_crossovers = 50
+population_size = 5
+total_crossovers = 5
 mutation_rate = 0.02
-generations = 100
+generations = 5
 population_fitness_vector = []
+column_list = ['best_fitness', 'avg_fitness']
+generation_stats_df = pd.DataFrame(columns=column_list)
 
 for i in range(population_size):
 	while True:
@@ -164,7 +167,8 @@ for generation_count in range(generations):
 			population_fitness_vector.append(fitness)
 			fitness_average = fitness_average + (fitness - fitness_average)/(count+1)
 			count+=1
-	
+	df_entry = pd.DataFrame([(fitness_fittest, fitness_average)], columns=column_list, index=[generation_count]) 
+	generation_stats_df = generation_stats_df.append(df_entry)
 	print "fitness of the fittest maze: ", fitness_fittest
 	print "average fitness of the new population: ", fitness_average
 
@@ -183,7 +187,9 @@ for generation_count in range(generations):
 	"""
 	maze_population = new_maze_population
 
-			
+
+print generation_stats_df	
+generation_stats_df.to_csv("generation_stats_df.csv")		
 hardest_maze = maze_population.get()
 print "fitness of the hardest maze: ", hardest_maze[0]
 maze_runner.visualize_maze(hardest_maze[1])
