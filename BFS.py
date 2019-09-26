@@ -9,7 +9,7 @@ BFS algorithm
 '''
 
 
-def bfs (maze, dim):
+def bfs(maze, dim):
     closed_set = []
     fringe = deque()
     exploration_steps = 0
@@ -24,7 +24,7 @@ def bfs (maze, dim):
         exploration_steps = exploration_steps + 1
         if (x, y) not in closed_set:
             # if current cell is the goal
-            if maze[x][y].value == 3:
+            if (x, y) == (dim-1, dim-1):
                 result_dict = {
                     "is_solvable": True,
                     "total_steps": exploration_steps,
