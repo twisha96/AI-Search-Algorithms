@@ -21,15 +21,15 @@ def test_population(new_maze_population):
 	print "--------------------"
 
 # Main code
-dim = 50
+dim = 15
 p = 0.2
 
 # priority queue with fitness (i.e. hardness) associated with each maze
 maze_population = PriorityQueue()
-population_size = 5
-total_crossovers = 5
+population_size = 50
+total_crossovers = 50
 mutation_rate = 0.02
-generations = 5
+generations = 500
 population_fitness_vector = []
 column_list = ['best_fitness', 'avg_fitness']
 generation_stats_df = pd.DataFrame(columns=column_list)
@@ -54,9 +54,6 @@ print "initial population generated"
 for generation_count in range(generations):
 	print "Generation: ", generation_count
 	for crossover_count in range(total_crossovers):
-		# if crossover_count%10==0:
-			# print crossover_count, " children generated"
-		print "Child number: ", crossover_count
 		# keep generating child mazes until we find a solvable one
 		while True:
 			"""Approach1: Parents chosen randomly"""
@@ -123,9 +120,7 @@ for generation_count in range(generations):
 				tmp_row = child_maze[mutation_rows[0]]
 				child_maze[mutation_rows[0]] = child_maze[mutation_rows[1]]
 				child_maze[mutation_rows[1]] = tmp_row
-
-
-			print "Mutation Successful"
+			# print "Mutation Successful"
 
 			# compute the fitness of each child
 			child_result_dict = \
@@ -189,9 +184,10 @@ for generation_count in range(generations):
 
 
 print generation_stats_df	
-generation_stats_df.to_csv("generation_stats_df.csv")		
+generation_stats_df.to_csv("generation_tmp.csv")		
 hardest_maze = maze_population.get()
 print "fitness of the hardest maze: ", hardest_maze[0]
 maze_runner.visualize_maze(hardest_maze[1])
 hardest_maze_result_dict = a_star_traversal(copy.deepcopy(hardest_maze[1]), "manhattan")
 maze_runner.visualize_explored_cells(hardest_maze[1], hardest_maze_result_dict["closed_set"])
+pdb.set_trace()
