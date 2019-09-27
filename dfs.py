@@ -81,11 +81,11 @@ def dfs_traversal(maze, dim):
 	}
 	return result_dict
 
-dim = 10
-p = 0.2
-maze = get_maze(dim, p)
-result = dfs_traversal(maze, dim)
-if result["is_solvable"]:
-	path = get_path(dim-1, dim-1, maze)
-	print "Path length: " + str((len(path)))
-	trace_path(maze, path)
+# dim = 10
+# p = 0.2
+# maze = get_maze(dim, p)
+# result = dfs_traversal(maze, dim)
+# if result["is_solvable"]:
+# 	path = get_path(dim-1, dim-1, maze)
+# 	print "Path length: " + str((len(path)))
+# 	trace_path(maze, path)

@@ -29,7 +29,7 @@ def bd_bfs (maze, dim):
             if maze[m1][n1].value != 1:
                 intersect1 = CheckNeighbours_BBFS.checkneighbours_bbfs(maze, m1, n1, dim, fringe1, closed1)
                 if intersect1 is not None:
-                    print "Intersecting node 1:", intersect1
+                    # print "Intersecting node 1:", intersect1
                     result = 1
                     break
                 closed1.append((m1, n1))
@@ -42,7 +42,7 @@ def bd_bfs (maze, dim):
             if maze[m2][n2].value != 1:
                 intersect2 = CheckNeighbours_BBFS.checkneighbours_bbfs(maze, m2, n2, dim, fringe2, closed2)
                 if intersect2 is not None:
-                    print "Intersecting node 2:", intersect2
+                    # print "Intersecting node 2:", intersect2
                     result = 1
                     break
                 closed2.append((m2, n2))
@@ -71,7 +71,7 @@ def bd_bfs (maze, dim):
                 if intersect1 == (dim - 1, dim - 1):
                     break
                 intersect1 = maze[intersect1[0]][intersect1[1]].parent
-            maze_runner.trace_path_bbfs(maze, path1, path2)
+            # maze_runner.trace_path_bbfs(maze, path1, path2)
 
         elif intersect2 is not None:
             path1 = maze_runner.get_path(intersect2[0], intersect2[1], maze)
@@ -80,7 +80,7 @@ def bd_bfs (maze, dim):
                 if current2 == (dim - 1, dim - 1):
                     break
                 current2 = maze[current2[0]][current2[1]].parent
-            maze_runner.trace_path_bbfs(maze, path2, path1)
+            # maze_runner.trace_path_bbfs(maze, path2, path1)
         # print path
         # print len(path)
 
@@ -94,11 +94,11 @@ def bd_bfs (maze, dim):
         }
         return result_dict
 
-dim = 10
-p = 0.1
-maze = maze_runner.get_maze(dim, p)
-result_bbfs = bd_bfs(maze, dim)
-print result_bbfs
+# dim = 10
+# p = 0.1
+# maze = maze_runner.get_maze(dim, p)
+# result_bbfs = bd_bfs(maze, dim)
+# print result_bbfs
 
 
 
