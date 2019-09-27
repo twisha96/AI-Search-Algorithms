@@ -6,6 +6,9 @@ import pandas as pd
 import copy 
 import maze_runner as mr
 
+# Get the array with values of q to be used to do the comparison between the baseline
+# algorithm and the proposed algorithm. The q value starts with 'start' and has jumps
+# of 'jump' and the total size of the array is 'size'
 def get_q_array(start, jump, size):
 	q_array = []
 	value = start
@@ -14,6 +17,8 @@ def get_q_array(start, jump, size):
 		value = value + jump
 	return q_array
 
+# For a given value of p, q, and dim, this method generates 100 mazes and runs the baseline
+# and the proposed algorithm on the mazes to compute success rate for both the algorithms
 def get_success_rate(p, q, dim):
 	success_count_proposed = 0
 	success_count_a_star = 0
@@ -28,6 +33,8 @@ def get_success_rate(p, q, dim):
 			success_count_a_star = success_count_a_star + 1
 	return success_count_proposed, success_count_a_star
 
+# Obtains success rate in % for baseline algorithm and the proposed algorithm over a range
+# of q values 
 def get_success_rate_over_range_of_q(p, dim, start, jump, size):
 	q_array = get_q_array(start, jump, size)
 	success_rates_proposed = []
@@ -60,6 +67,7 @@ plt.legend()
 plt.show()
 '''
 
+'''
 dim = 30
 p = 0.20
 q = 0.2
@@ -96,3 +104,4 @@ else:
 	maze_proposed[x_cord_p][y_cord_p].value = 1.5
 	path = mr.get_path(x_cord_p, y_cord_p, maze_proposed)
 	mr.trace_path(maze_proposed, path)
+'''
