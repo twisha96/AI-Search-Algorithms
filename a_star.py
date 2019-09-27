@@ -132,7 +132,7 @@ def a_star_traversal(maze, heuristic):
 
 
 
-def a_star_traversal_with_fire(maze, heuristic):
+def a_star_traversal_with_fire(maze, heuristic, q):
 	closed_set = set()
 	fringe = PriorityQueue()
 	fringe.put((0, (0, 0)))
@@ -180,7 +180,7 @@ def test_a_star(dim, p):
 		maze_runner.visualize_maze(maze)
 
 # Main code
-
+'''
 dim = 20
 p = 0.2
 test_maze = maze_runner.get_maze(dim, p)
@@ -195,16 +195,16 @@ if manhattan_result_dict["is_solvable"]:
  	maze_runner.trace_path(maze, path)
 else:
  	maze_runner.visualize_maze(maze)
-
+'''
 
 #Fire code
 '''
-dim = 20
-p = 0.25
-q = 0.2
+dim = 50
+p = 0.306
+q = 0.1
 maze = maze_runner.get_maze(dim, p)
 maze_runner.visualize_maze(maze)
-manhattan_result, manhattan_steps, manhattan_max_fringe_length, manhattan_avg_fringe_length, manhattan_closed_set, x_cord, y_cord = a_star_traversal_with_fire(maze, "manhattan")
+manhattan_result, manhattan_steps, manhattan_max_fringe_length, manhattan_avg_fringe_length, manhattan_closed_set, x_cord, y_cord = a_star_traversal_with_fire(maze, "manhattan", q)
 maze_runner.visualize_maze(maze)
 if manhattan_result == 1:
 	print "Solution found"
